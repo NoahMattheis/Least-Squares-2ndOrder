@@ -1,0 +1,35 @@
+% Code for Least Squares Second Order
+% Polynomial Approximation. 
+
+% Input data
+x = [0 1 2 3 4 5];
+y = [5 6.3 7 6.8 9 10];
+
+% Normalize Data
+xnorm = (x - mean(x))/(max(x) - min(x));
+
+% Creating Matrix A'b
+Atb = [sum(y) sum(y.*xnorm) sum(y.*(xnorm.^2))];
+
+% Creating matrix AtA for Least Squares Approx
+for i = 1:3
+    count = i - 1;
+    for j = 1:3    
+            D(i,j) = sum(xnorm.^count);
+            count = count + 1;
+    end  
+end
+
+% Solving for polynomial approximation
+P = linsolve(D, Atb')
+Psol = P(1,:) + P(2,:).*xnorm + P(3,:).*(xnorm.^2)
+
+% Finding Error for approximation
+E = sum((y - Psol).^2)
+
+% Printing results
+fprintf('\nThe Least Squares Second Order Polynomial Approximation is: \n')
+fprintf('P(x) = %g + ', P(1,:))
+fprintf('%gx + ', P(2,:))
+fprintf('%gx^2 + \n', P(3,:))
+fprintf('With error E = %g', E)
